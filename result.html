@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Dark Personality Result</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h1>Your Dark Personality Result</h1>
+  <div id="result"></div>
+  <!-- Hide this button initially -->
+  <div id="retry" style="display:none; text-align:center; margin-top:20px;">
+    <button onclick="location.href='index.html'">Take Again</button>
+  </div>
+</div>
+
+<script>
+const resultData = JSON.parse(localStorage.getItem('darkTestScores'));
+
+if(!resultData){
+  document.getElementById('result').innerHTML = "<p>No result found. Please take the quiz first.</p>";
+} else {
+  const { mach, psy, soc } = resultData;
+  const total = mach + psy + soc;
+  const machP = Math.round((mach/total)*100);
+  const psyP = Math.round((psy/total)*100);
+  const socP = Math.round((soc/total)*100);
+
+  let dominant = 'mach';
+  if(psy > mach && psy > soc) dominant = 'psy';
+  else if(soc > mach && soc > psy) dominant = 'soc';
+
+  let text = "";
+  if(dominant === "mach") text = "🧠 Machiavellian: strategic and manipulative.";
+  if(dominant === "psy") text = "🧊 Psychopathic: calm and emotionally detached.";
+  if(dominant === "soc") text = "🔥 Sociopathic: impulsive and reactive.";
+
+  document.getElementById('result').innerHTML = `
+    <h2>${text}</h2>
+    <p>Machiavellian: ${machP}%</p><div class="bar mach" style="width:${machP}%"></div>
+    <p>Psychopath: ${psyP}%</p><div class="bar psy" style="width:${psyP}%"></div>
+    <p>Sociopath: ${socP}%</p><div class="bar soc" style="width:${socP}%"></div>
+    <p style="text-align:center; margin-top:10px;">Share your result and challenge your friends 😈</p>
+  `;
+
+  // Show the button only now
+  document.getElementById('retry').style.display = "block";
+}
+</script>
+</body>
+</html>
